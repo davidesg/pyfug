@@ -43,3 +43,4 @@ pyfug = "pyfug.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["."]
+include = ["pyfug*"]   # exclude tests/ and data/ from the wheel
