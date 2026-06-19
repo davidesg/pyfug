@@ -1,4 +1,4 @@
-# pyfug — Jenkins-Treadway High-Definition Time Series Graphics
+# pyfug — High-Definition Time Series Analysis Graphics
 
 ![Version](https://img.shields.io/badge/version-2.0.0-blue)
 ![Python](https://img.shields.io/badge/python-3.10%2B-blue)
