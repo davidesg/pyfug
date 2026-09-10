@@ -61,8 +61,13 @@ def plot_combined(ser, npar=0, tsnobs=None, timeout=None, tsby=None,
         tsnobs = n + (timeout or 0)
     if timeout is None:
         timeout = 0
+    outyear = int(getattr(ser, 'outyear', 0) or 0)
     if tsby is None:
-        tsby = ser.begyear
+        # CONVENIO DE FUG C (fug.c:399-404). Para anuales el origen de los
+        # rótulos NO es `begyear` sino `begyear - outyear`:
+        #     if (freq > 1) ... ser->begyear ...
+        #     else          ... ser->begyear - ser->outyear ...
+        tsby = ser.begyear - outyear if f == 1 else ser.begyear
 
     size    = series_size(tsnobs, f)
     abs_max = series_max(z)
@@ -153,15 +158,49 @@ def plot_combined(ser, npar=0, tsnobs=None, timeout=None, tsby=None,
         ax_s.set_xticks(tick_pos)
         ax_s.set_xticklabels(tick_lbl, fontsize=JT_FONT_YEAR)
     else:
-        # Annual series (f==1): the f>1 branch above never runs, so x_pad would be
-        # undefined at set_xlim below. Define it here (see TODO.md, annual-freq bug).
-        x_pad = 0.3 / f
-        step = 10
-        first_yr = (int(xs[0]) // step) * step
-        tick_pos = [yr for yr in range(first_yr, int(xs[-1]) + step + 1, step)
-                    if xs[0] <= yr <= xs[-1]]
+        # ── ANUAL (f == 1) — el convenio de fug C, no un parche ────────────
+        #
+        # Aquí `x_pad` ni siquiera se asignaba y el `set_xlim` de abajo lo
+        # consumía: la figura no salía (BUG-0002). El primer arreglo puso
+        # `x_pad = 0.3/f` y `step = 10`, que quita el error y **no es el
+        # convenio**. Éste lo es, y sale de tres sitios de `fug-1.12.02_win`:
+        #
+        #   fug.c:332     ornsop  = nrdiff + freq*nadiff
+        #   fug.c:382     timeout = ornsop + ser->outyear        ← sólo anuales
+        #   fug.c:404     ... , ser->begyear - ser->outyear , ...
+        #   gnuplot_i.c:1275   plot [-timeout : n-1][-AbsMax : AbsMax]
+        #   gnuplot_graphics.c:493-509, 510-517
+        #                 líneas y rótulos en  -tmornsop + 2*f*i*10, o sea
+        #                 **cada 20 años** con f=1, y el rótulo i-ésimo es
+        #                 tsby + 2*i*10
+        #
+        # `outyear` es «year before graph (only yearly data)» (fug.h:58): un
+        # margen izquierdo EN AÑOS que el usuario declara en el `.inp`. No es
+        # un pad cosmético — es una propiedad de la serie, existe **sólo** en
+        # las anuales, y `pyfug` la llevaba en el `Tseries` sin usarla. De ahí
+        # sale el hueco a la izquierda: no hay que inventarlo.
+        #
+        # El eje arranca en el primer rótulo, que es `begyear - outyear`, y
+        # queda a la izquierda de los datos por lo que se comió la
+        # diferenciación más `outyear`.
+        step = 20
+        first_yr = int(tsby)
+        x_pad = max(0.0, float(xs[0] - first_yr))
+        tick_pos, tick_lbl = [], []
+        k = 0
+        while True:
+            yr = first_yr + step * k
+            if yr > xs[-1]:
+                break
+            # C dibuja la línea vertical desde i = 1: el primer rótulo, que
+            # cae en el borde del eje, va sin línea.
+            if k > 0:
+                ax_s.axvline(yr, color='k', lw=0.5, zorder=1)
+            tick_pos.append(yr)
+            tick_lbl.append(str(yr))
+            k += 1
         ax_s.set_xticks(tick_pos)
-        ax_s.set_xticklabels([str(y) for y in tick_pos], fontsize=JT_FONT_YEAR)
+        ax_s.set_xticklabels(tick_lbl, fontsize=JT_FONT_YEAR)
 
     # Major tick at each year (longer), minor tick at each observation (shorter)
     ax_s.tick_params(axis='x', which='major', direction='out', length=5, width=0.8, pad=6)

@@ -125,3 +125,33 @@ los paneles), que es la razón de que esos valores sean fijos.
 - Añadir el caso trimestral de 25 años a la batería de figuras.
 - Comprobar que el mensual de 18 años conserva el paso de 2 años, para no
   cambiar las figuras que ya se ven bien.
+
+
+---
+
+## Nota añadida al arreglar BUG-0002 (10-sep-2026)
+
+Al llevar la rama **anual** al convenio de `fug` C se vio que este defecto y
+aquél son **el mismo, por los dos extremos**: el paso del eje está fijo en el
+convenio heredado —2 años si `f > 1`, 20 si `f == 1`— y por eso queda
+
+- **demasiado denso** en trimestrales largas: trece rótulos pisados en 25 años;
+- **demasiado ralo** en anuales cortas: una serie de 15 años sale con **un solo
+  rótulo**, y es lo que hace C.
+
+Así que el arreglo propuesto arriba —elegir el paso según el espacio— tiene que
+aplicarse a **las dos ramas**, y cuando se haga las dos **se apartarán del
+convenio a sabiendas**. Conviene que quede escrito, porque hasta hoy la regla
+del puerto era reproducir el C.
+
+Y dos desviaciones de C que ya existían en la rama `f > 1`, encontradas al
+comparar, que este defecto debe recoger:
+
+| | `pyfug` hoy | `fug` C (1.12.02) |
+|---|---|---|
+| origen de los rótulos | `(int(x0) // step) * step` — múltiplo redondeado hacia abajo | `tsby`, o sea `begyear` |
+| límite derecho | `xs[-1] + 0.3/f` | `n-1` exacto (`gnuplot_i.c:1275`) |
+
+La primera **es** el defecto menor que este informe ya anotaba —el rótulo de
+1994 en una serie que empieza en 1995—, y ahora se sabe que no es un descuido
+del puerto sino el convenio roto.
