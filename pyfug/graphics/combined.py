@@ -153,6 +153,9 @@ def plot_combined(ser, npar=0, tsnobs=None, timeout=None, tsby=None,
         ax_s.set_xticks(tick_pos)
         ax_s.set_xticklabels(tick_lbl, fontsize=JT_FONT_YEAR)
     else:
+        # Annual series (f==1): the f>1 branch above never runs, so x_pad would be
+        # undefined at set_xlim below. Define it here (see TODO.md, annual-freq bug).
+        x_pad = 0.3 / f
         step = 10
         first_yr = (int(xs[0]) // step) * step
         tick_pos = [yr for yr in range(first_yr, int(xs[-1]) + step + 1, step)
