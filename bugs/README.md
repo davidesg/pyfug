@@ -10,4 +10,6 @@ New report: `art-bug new` (or copy `TEMPLATE.md`).  Validate: `art-bug check`.  
 |----|--------|-----|-----------|-------|----------|
 | [BUG-0001](BUG-0001-los-anos-del-eje-temporal-se-solapan.md) | open | medium | graphics | Los años del eje temporal se solapan en series trimestrales largas — pyfug fija el paso en dos años y encoge la figura | — |
 | [BUG-0002](BUG-0002-la-figura-se-rompia-en-series-anuales.md) | fixed | high | graphics | La figura combinada se rompía en TODA serie anual — `x_pad` sólo se asignaba en la rama f>1 y se usaba siempre | 2.0.1 |
+| [BUG-0003](BUG-0003-la-serie-diferenciada-se-fecha-dos-veces.md) | open | medium | graphics | La serie diferenciada se fecha DOS veces — `diffgraph` ya desplaza el inicio y `plot_combined` le vuelve a sumar las observaciones consumidas | — |
+| [BUG-0004](BUG-0004-importar-pyfug-cambia-todas-las-figuras-del-proceso.md) | open | medium | graphics | Importar pyfug cambia TODAS las figuras del proceso — `graphics/base.py` reescribe los `rcParams` globales de matplotlib al cargarse | — |
 
