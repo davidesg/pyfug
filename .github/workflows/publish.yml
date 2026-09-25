@@ -3,6 +3,13 @@ name: Publish
 # Pure-Python package: build the sdist + universal wheel and publish to PyPI via
 # trusted publishing (OIDC) on a version tag. workflow_dispatch builds without
 # publishing (the publish job is gated on the tag).
+#
+# 2026-09-25: este fichero estaba en GitHub desde el 20 de julio y Actions nunca
+# lo registró —la lista de workflows del repo sólo tenía «Dependency Graph» y
+# `gh workflow run publish.yml` daba 404—, así que pyfug no se había publicado
+# nunca por aquí: la 2.0.0 se subió a mano. Este cambio existe para que GitHub
+# lo registre. La publicación exige además un trusted publisher en PyPI para
+# davidesg/pyfug, workflow publish.yml, entorno `pypi`.
 
 on:
   push:
