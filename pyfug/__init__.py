@@ -22,7 +22,7 @@ $ pyfug PU one -c        # combined series + ACF/PACF plot
 $ pyfug PU set 2 1 -c    # identification plots set
 """
 
-__version__ = "2.0.0"
+__version__ = "2.0.1"   # también en pyproject.toml: ver TODO (escrita dos veces)
 __author__ = "David E. Guerrero & Arthur B. Treadway"
 
 from pyfug.core import Tseries

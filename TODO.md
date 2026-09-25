@@ -69,3 +69,9 @@ Gráficos actuales implementados y estables:
 | `acf_pacf.py` | ✅ estable | ancho = columna ACF del combinado |
 | `histogram.py` | ✅ estable | JB p-valor incluido |
 | `mean_deviation.py` | ✅ estable | scatter std. mean vs std. std-dev, nog=freq por defecto |
+
+## Empaquetado — la versión, escrita una sola vez (2026-09-25)
+
+- [ ] `__version__` está escrita a mano en `pyfug/__init__.py` además de en
+      `pyproject.toml`. Derivarla de la metadata, como hizo fue en su BUG-0016
+      (allí se quedó tres versiones atrás sin que nada lo delatara).
