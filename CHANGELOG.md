@@ -4,6 +4,16 @@ Gráficos Jenkins-Treadway para el análisis de series temporales: el puerto a
 Python de fug (C, Treadway y Guerrero). Registro de defectos en `bugs/`.
 Etiquetas de publicación: `v*`.
 
+## Unreleased
+
+**Without statsmodels.** ACF, PACF and Ljung-Box are computed in
+`pyfug.statistics` with numpy and scipy, with the same formulas as fue's
+(`fue.acf`, `fue.pacf`, `fue.ljung_box`): the ACF to 2e-16, the PACF
+(Yule-Walker by Durbin-Levinson) to 5e-14, and they also reproduce
+statsmodels' `acf(adjusted=…)`, `pacf(method="ywm")` and `acorr_ljungbox`.
+statsmodels leaves the dependencies. `jupyter.from_statsmodels_result` still
+reads a statsmodels result if one is passed; it never imported the package.
+
 ## 2.0.1 — 2026-09-25
 
 **La figura combinada se rompía en TODA serie anual** (BUG-0002). `x_pad` sólo se

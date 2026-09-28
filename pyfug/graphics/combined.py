@@ -78,7 +78,7 @@ def plot_combined(ser, npar=0, tsnobs=None, timeout=None, tsby=None,
             nlags = max(1, n - f // 2)
         else:
             nlags = max(10, 3 * (f + 1))
-    # PACF (statsmodels Levinson-Durbin) requires nlags < n/2; cap both panels
+    # PACF (Durbin-Levinson) requires nlags < n/2; cap both panels
     # to the same feasible maximum so ACF and PACF stay consistent on short
     # series. The Jenkins-Treadway convention (3·(f+1)) is preserved whenever
     # the sample is long enough (n > 6·(f+1)).

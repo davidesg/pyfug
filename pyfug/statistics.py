@@ -4,15 +4,17 @@ Statistics module for pyfug.
 Computes descriptive statistics, ACF, PACF, and diagnostic tests
 for time series analysis.
 
-Uses statsmodels for robust ACF/PACF computation with standard
-confidence intervals, and scipy for distribution tests.
+ACF, PACF and Ljung-Box are computed here with numpy and scipy, with the same
+formulas as fue's (`fue.acf`, `fue.pacf`, `fue.ljung_box`); the tests pin
+the agreement to rounding. statsmodels is no longer a dependency (2026-09-28): the suite
+computes these itself, and a third-party convention (the MA sign of
+statsmodels' ArmaProcess, art BUG-0192) already cost a defect once.
 """
 
 from __future__ import annotations
 
 import numpy as np
 from typing import Optional, Tuple
-from statsmodels.tsa.stattools import acf as sm_acf, pacf as sm_pacf
 from scipy import stats as sp_stats
 
 
@@ -90,10 +92,15 @@ def acf(data: np.ndarray, nlags: int, unbiased: bool = False) -> np.ndarray:
     if nlags < 1:
         return np.array([])
 
-    # Use statsmodels
-    result = sm_acf(data, nlags=nlags, fft=False, adjusted=unbiased)
-    # Return lags 1..nlags (skip lag 0 which is always 1.0)
-    return result[1:]
+    d = np.asarray(data, dtype=float)
+    d = d - d.mean()
+    n = len(d)
+    c0 = float(d @ d) / n
+    if c0 <= 0.0:
+        return np.zeros(nlags)
+    ck = np.array([float(d[k:] @ d[:n - k]) for k in range(1, nlags + 1)])
+    ck /= (n - np.arange(1, nlags + 1)) if unbiased else n
+    return ck / c0
 
 
 def pacf(data: np.ndarray, nlags: int) -> np.ndarray:
@@ -111,17 +118,24 @@ def pacf(data: np.ndarray, nlags: int) -> np.ndarray:
     np.ndarray
         PACF values for lags 1..nlags.
     """
-    # statsmodels pacf can only estimate partial autocorrelations for lags up
-    # to 50% of the sample size; cap defensively so any caller is safe.
+    # Partial autocorrelations are estimable only up to 50 % of the sample
+    # size; cap defensively so any caller is safe.
     max_nlags = len(data) // 2 - 1
     if nlags > max_nlags:
         nlags = max_nlags
     if nlags < 1:
         return np.array([])
 
-    result = sm_pacf(data, nlags=nlags, method="ywm")
-    # Return lags 1..nlags (skip lag 0 which is always 1.0)
-    return result[1:]
+    # Yule-Walker on the (biased) sample ACF, by Durbin-Levinson.
+    r = np.r_[1.0, acf(data, nlags)]
+    out = np.zeros(nlags)
+    prev = np.zeros(0)
+    for k in range(1, nlags + 1):
+        den = 1.0 - float(prev @ r[1:k])
+        a = (r[k] - float(prev @ r[k - 1:0:-1])) / den if den != 0.0 else 0.0
+        prev = np.r_[prev - a * prev[::-1], a]
+        out[k - 1] = a
+    return out
 
 
 def ljung_box(data: np.ndarray, nlags: int) -> Tuple[float, float]:
@@ -139,13 +153,12 @@ def ljung_box(data: np.ndarray, nlags: int) -> Tuple[float, float]:
     tuple
         (Q statistic, p-value)
     """
-    from statsmodels.stats.diagnostic import acorr_ljungbox
     if nlags < 1:
         return 0.0, 1.0
-    result = acorr_ljungbox(data, lags=[nlags], return_df=False)
-    q = float(result.lb_stat.iloc[0])
-    pval = float(result.lb_pvalue.iloc[0])
-    return q, pval
+    n = len(data)
+    r = acf(data, nlags)
+    q = float(n * (n + 2) * np.sum(r ** 2 / (n - np.arange(1, nlags + 1))))
+    return q, float(sp_stats.chi2.sf(q, nlags))
 
 
 def chi_test(data: np.ndarray, nlags: int) -> float:
