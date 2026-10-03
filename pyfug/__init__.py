@@ -38,6 +38,7 @@ from pyfug.graphics import (
     plot_combined,
     plot_histogram,
     plot_mean_deviation,
+    plot_forecast,
     diffgraph,
 )
 from pyfug.ascii import generate_ascii_output
@@ -48,6 +49,6 @@ __all__ = [
     "boxcox", "regular_diff", "seasonal_diff", "apply_diffops",
     "acf", "pacf", "ljung_box", "descriptive_stats", "chi_test",
     "plot_series", "plot_acf_pacf", "plot_combined",
-    "plot_histogram", "plot_mean_deviation",
+    "plot_histogram", "plot_mean_deviation", "plot_forecast",
     "diffgraph", "generate_ascii_output",
 ]

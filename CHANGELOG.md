@@ -6,6 +6,18 @@ Etiquetas de publicación: `v*`.
 
 ## Unreleased
 
+
+**The forecast graph of fuf: `plot_forecast`.** fufplot.c's `fp_forecast`,
+with its two panels (the series with its forecasts and bands, and «ERR»), on
+the 324×453 pt canvas, with the same scales, year steps and ticks. It takes
+plain arrays, so any engine draws it; fue prepares them with
+`fue.forecast.forecast_graph_data`.
+
+**`pyfug.graphics.panels`.** `tj_spines`, `seasonal_lags` and `corr_on_axes`
+are axes-level pieces for an engine's own figures. They replace the private
+helpers of `fue.plots` that art imported.
+
+
 **The series + acf/pacf figure has fug C's geometry** (BUG-0007).
 `plot_combined` now uses the C canvas in points, its panel positions, font
 sizes and line widths, and places the title as GraphMaker does: left-aligned

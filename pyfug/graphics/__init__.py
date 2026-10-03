@@ -7,6 +7,7 @@ Implements the Jenkins-Treadway high-definition plots:
 - Combined series + ACF/PACF plot
 - Histogram with normal distribution overlay
 - Mean-Deviation (m-dt) chart
+- Forecast graph (fuf)
 
 All plots use matplotlib with precise layout proportions
 matching the original FUG designs for publication quality.
@@ -21,10 +22,11 @@ from pyfug.graphics.combined import plot_combined
 from pyfug.graphics.histogram import plot_histogram
 from pyfug.graphics.mean_deviation import plot_mean_deviation, plot_mean_deviation_pair
 from pyfug.graphics.engine import diffgraph
+from pyfug.graphics.forecast import plot_forecast
 
 __all__ = [
     "JTFigure", "plot_title", "file_plot_name", "STANDARD_WIDTH",
     "plot_series", "plot_acf_pacf", "plot_combined",
     "plot_histogram", "plot_mean_deviation", "plot_mean_deviation_pair",
-    "diffgraph",
+    "diffgraph", "plot_forecast",
 ]
