@@ -55,7 +55,7 @@ def test_una_mensual_que_cabe_conserva_el_ano_entero():
 
 
 def test_una_mensual_larga_pasa_a_dos_digitos_y_no_se_monta():
-    et, boxes = _rotulos(12, 1990, 12 * 35)
+    et, boxes = _rotulos(12, 1975, 12 * 50)
     assert all(len(t) == 2 for t in et), et
     for a, b in zip(boxes, boxes[1:]):
         assert a.x1 < b.x0
@@ -66,3 +66,29 @@ def test_una_trimestral_de_31_anos_no_monta_los_rotulos():
     _, boxes = _rotulos(4, 1995, 124)
     for a, b in zip(boxes, boxes[1:]):
         assert a.x1 < b.x0, "dos rótulos de año se solapan"
+
+
+# ── BUG-0006: la alineación de fug C, que corrigió Treadway ──────────────
+
+def test_el_primer_rotulo_es_el_ano_de_comienzo_aunque_sea_impar():
+    """C: el eje arranca en el primer período del año de comienzo y rotula
+    cada 2 años desde ahí. Antes se redondeaba al año PAR anterior: una serie
+    de 1995 salía con «94, 96, …»."""
+    et, _ = _rotulos(4, 1995, 124, begper=2)
+    assert et[:4] == ["95", "97", "99", "01"], et
+
+
+def test_el_eje_empieza_en_el_ano_de_comienzo():
+    rng = np.random.default_rng(0)
+    y = 100 * np.exp(np.cumsum(0.02 + 0.05 * rng.standard_normal(60)))
+    fig = plot_combined(Tseries(name="S", nobs=60, freq=4, begyear=1995,
+                                begtime=3, data=np.asarray(y, dtype=float)))
+    ax = max(fig.axes, key=lambda a: a.get_position().width)
+    assert ax.get_xlim()[0] == pytest.approx(1995.0)
+    matplotlib.pyplot.close(fig)
+
+
+def test_una_serie_corta_tambien_va_cada_dos_anos():
+    """C no cambia de paso con series cortas; aquí se usaba 1 por debajo de 5."""
+    et, _ = _rotulos(12, 2015, 48)
+    assert et == ["2015", "2017"], et

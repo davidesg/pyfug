@@ -6,6 +6,17 @@ Etiquetas de publicación: `v*`.
 
 ## Unreleased
 
+**The series + acf/pacf figure has fug C's geometry** (BUG-0007).
+`plot_combined` now uses the C canvas in points, its panel positions, font
+sizes and line widths, and places the title as GraphMaker does: left-aligned
+from 80 % of the series panel. The acf/pacf axis stays adaptive.
+
+**The seasonal year axis is aligned as in fug C** (BUG-0006). The axis
+starts at the first period of the series' starting year, with a line and a
+label every 2 years from that year. This is the alignment Treadway
+corrected. It used to start at the preceding even year, and used a step of 1
+in short series.
+
 **Quarterly year labels have two digits, as in GraphMaker** (BUG-0005).
 - A quarterly series labels every other year as `96`, `98`, `00`. With full
   years the labels overlapped once a series passed about 25 years.
