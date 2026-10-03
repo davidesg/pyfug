@@ -1,11 +1,11 @@
 ---
 id: BUG-0004
 title: Importar pyfug cambia TODAS las figuras del proceso — `graphics/base.py` reescribe los `rcParams` globales de matplotlib al cargarse
-status: open
+status: fixed
 severity: medium
 component: graphics
 found_in: 2.0.0
-fixed_in:
+fixed_in: 2.0.2.dev0
 reported: 2026-09-25
 reporter: David — revisión de las figuras de la suite (art BUG-0165)
 tags:
@@ -52,3 +52,29 @@ figura. Ninguna escritura en `rcParams` al importar.
 
 Que `import pyfug` deje `rcParams` intacto y que las figuras de pyfug sigan
 saliendo con su estilo.
+
+## Resolution (2026-10-03)
+
+The style is applied per figure.
+
+- `base.jt_style` is a decorator that runs a function inside
+  `matplotlib.rc_context` with the Jenkins-Treadway parameters.
+- It wraps every public drawing function: `plot_combined`, `plot_series`,
+  `plot_acf_pacf`, `plot_histogram`, `plot_mean_deviation`,
+  `plot_mean_deviation_pair`, `plot_forecast`, `diffgraph` and
+  `diffgraph_set`.
+- Importing pyfug no longer touches `rcParams`.
+- `use_jt_style()` applies the style to the whole process, as an explicit
+  opt-in. `_setup_matplotlib_rc` survives as its alias, and nothing calls it.
+
+A consequence worth knowing: art's own figures (seasonal pattern, ladder,
+outlier scan) used to take pyfug's style by accident, because art imports
+pyfug. They now use matplotlib's defaults wherever they set no size
+themselves. Their resolution does not change, because art saves with an
+explicit dpi and `bbox_inches="tight"`.
+
+**Validation:** `tests/test_bug_0004_rcparams_por_figura.py`:
+- importing pyfug in a fresh process changes no rcParam;
+- drawing a pyfug figure changes none either;
+- `use_jt_style()` applies the style when asked.
+

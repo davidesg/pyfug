@@ -11,10 +11,11 @@ import numpy as np
 from matplotlib.figure import Figure
 
 from pyfug.statistics import acf, pacf, chi_test, acf_pacf_max, series_max, series_size
-from pyfug.graphics.base import _compacta_si_se_montan
+from pyfug.graphics.base import jt_style, _compacta_si_se_montan
 from pyfug.graphics import fugplot as fp
 
 
+@jt_style
 def plot_combined(ser, npar=0, tsnobs=None, timeout=None, tsby=None,
                   d=0, ds=0, nlags=0, cbands=0.0,
                   title="", fig=None) -> Figure:

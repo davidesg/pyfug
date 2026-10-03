@@ -18,12 +18,14 @@ from matplotlib.figure import Figure
 from scipy import stats
 
 from pyfug.statistics import descriptive_stats
+from pyfug.graphics.base import jt_style
 from pyfug.graphics.base import (
     JT_COLOR_HIST_FILL, JT_COLOR_NORMAL, JT_COLOR_SERIES,
     JT_LINE_WIDTH_BORDER, JT_LINE_WIDTH_SERIES,
 )
 
 
+@jt_style
 def plot_histogram(ser, d=0, ds=0, title="", fig=None) -> Figure:
     """Plot histogram with normal overlay — Jenkins-Treadway style.
 

@@ -14,10 +14,11 @@ import numpy as np
 from matplotlib.figure import Figure
 
 from pyfug.statistics import series_max, series_size
-from pyfug.graphics.base import _compacta_si_se_montan
+from pyfug.graphics.base import jt_style, _compacta_si_se_montan
 from pyfug.graphics import fugplot as fp
 
 
+@jt_style
 def plot_series(ser, tsnobs=None, timeout=None, tsby=None,
                 d=0, ds=0, title="",
                 fig=None, ax=None) -> Figure:

@@ -1,11 +1,11 @@
 ---
 id: BUG-0001
 title: Los años del eje temporal se solapan en series trimestrales largas — pyfug fija el paso en dos años y encoge la figura
-status: open
+status: fixed
 severity: medium
 component: graphics
 found_in: 2.0.0
-fixed_in:
+fixed_in: 2.0.2.dev0
 reported: 2026-09-10
 reporter: David
 tags:
@@ -155,3 +155,19 @@ comparar, que este defecto debe recoger:
 La primera **es** el defecto menor que este informe ya anotaba —el rótulo de
 1994 en una serie que empieza en 1995—, y ahora se sabe que no es un descuido
 del puerto sino el convenio roto.
+
+## Resolution (2026-10-03)
+
+Fixed by three later changes, without a change of its own:
+
+- **BUG-0005:** quarterly years carry two digits, as in GraphMaker;
+- **BUG-0006:** the axis starts at the series' starting year, so the «1994»
+  label before the first observation is gone;
+- **BUG-0007:** fug C's geometry and its 8.6 pt year font.
+
+Rerunning the reproduction above (a quarterly series from 1995T1 to 2019T4,
+100 observations, through art's `describe_identification`) gives the labels
+`95 97 99 01 03 05 07 09 11 13 15 17 19`, with no overlap measured by the
+renderer. The 31-year case is pinned by
+`tests/test_bug_0005_rotulos_de_dos_digitos.py::test_una_trimestral_de_31_anos_no_monta_los_rotulos`.
+

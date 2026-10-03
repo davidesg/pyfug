@@ -4,14 +4,14 @@ In-repo bug tracker for **pyfug — los gráficos de la escuela Jenkins-Treadway
 
 New report: `art-bug new` (or copy `TEMPLATE.md`).  Validate: `art-bug check`.  A fix commit references the id, e.g. `fix(pipeline): BUG-0001 …`.
 
-**7 report(s), 3 open.**
+**7 report(s), 0 open.**
 
 | id | status | sev | component | title | fixed in |
 |----|--------|-----|-----------|-------|----------|
-| [BUG-0001](BUG-0001-los-anos-del-eje-temporal-se-solapan.md) | open | medium | graphics | Los años del eje temporal se solapan en series trimestrales largas — pyfug fija el paso en dos años y encoge la figura | — |
-| [BUG-0003](BUG-0003-la-serie-diferenciada-se-fecha-dos-veces.md) | open | medium | graphics | La serie diferenciada se fecha DOS veces — `diffgraph` ya desplaza el inicio y `plot_combined` le vuelve a sumar las observaciones consumidas | — |
-| [BUG-0004](BUG-0004-importar-pyfug-cambia-todas-las-figuras-del-proceso.md) | open | medium | graphics | Importar pyfug cambia TODAS las figuras del proceso — `graphics/base.py` reescribe los `rcParams` globales de matplotlib al cargarse | — |
+| [BUG-0001](BUG-0001-los-anos-del-eje-temporal-se-solapan.md) | fixed | medium | graphics | Los años del eje temporal se solapan en series trimestrales largas — pyfug fija el paso en dos años y encoge la figura | 2.0.2.dev0 |
 | [BUG-0002](BUG-0002-la-figura-se-rompia-en-series-anuales.md) | fixed | high | graphics | La figura combinada se rompía en TODA serie anual — `x_pad` sólo se asignaba en la rama f>1 y se usaba siempre | 2.0.1 |
+| [BUG-0003](BUG-0003-la-serie-diferenciada-se-fecha-dos-veces.md) | fixed | medium | graphics | La serie diferenciada se fecha DOS veces — `diffgraph` ya desplaza el inicio y `plot_combined` le vuelve a sumar las observaciones consumidas | 2.0.2.dev0 |
+| [BUG-0004](BUG-0004-importar-pyfug-cambia-todas-las-figuras-del-proceso.md) | fixed | medium | graphics | Importar pyfug cambia TODAS las figuras del proceso — `graphics/base.py` reescribe los `rcParams` globales de matplotlib al cargarse | 2.0.2.dev0 |
 | [BUG-0005](BUG-0005-en-series-estacionales-los-a-os-se-rotulan-enter.md) | fixed | medium | graphics | En series estacionales los años se rotulan enteros y se montan a partir de ~25 años — GraphMaker los rotulaba con dos dígitos | 2.0.2.dev0 |
 | [BUG-0006](BUG-0006-el-eje-de-las-series-estacionales-se-alinea-con-.md) | fixed | medium | graphics | El eje de las series estacionales se alinea con el año PAR anterior y cambia a paso 1 en series cortas — fug C, con la corrección de Treadway, arranca en el año de comienzo y va cada 2 años | 2.0.2.dev0 |
 | [BUG-0007](BUG-0007-plot-combined-no-reproduce-la-geometr-a-de-fug-c.md) | fixed | medium | graphics | plot_combined no reproduce la geometría de fug C — la serie ocupa el 75 % del alto (51 % en C), la acf/pacf es mayor y desigual y las fuentes son el doble | 2.0.2.dev0 |

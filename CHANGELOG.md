@@ -6,6 +6,16 @@ Etiquetas de publicación: `v*`.
 
 ## Unreleased
 
+**Fixes in the plotting engine**
+- **BUG-0001** (closed): long quarterly axes no longer overlap. It was
+  resolved by BUG-0005, 0006 and 0007.
+- **BUG-0003:** `diffgraph` dated the differenced series twice. The plotted
+  series now keeps the original start, with the lost observations in
+  `timeout`.
+- **BUG-0004:** importing pyfug no longer rewrites matplotlib's global
+  rcParams. The style applies per figure (`jt_style`), and `use_jt_style()`
+  opts in globally.
+
 
 **The forecast graph of fuf: `plot_forecast`.** fufplot.c's `fp_forecast`,
 with its two panels (the series with its forecasts and bands, and «ERR»), on

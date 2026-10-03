@@ -24,6 +24,7 @@ import numpy as np
 from matplotlib.figure import Figure
 
 from pyfug.graphics import fugplot as fp
+from pyfug.graphics.base import jt_style
 
 # fufplot.c. Las medidas están en puntos.
 W, H = 324.0, 453.0
@@ -111,6 +112,7 @@ def _yaxis(ax, v0, v1, step):
     ax.tick_params(axis="y", direction="out", length=TIC, width=LW_AXIS, pad=2.0)
 
 
+@jt_style
 def plot_forecast(y, band, band2, err, L, sigma, freq, first_year,
                   first_season, title, fig=None) -> Figure:
     """The forecast graph of fuf (fp_forecast).

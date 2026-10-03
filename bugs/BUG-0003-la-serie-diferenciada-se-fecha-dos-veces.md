@@ -1,11 +1,11 @@
 ---
 id: BUG-0003
 title: La serie diferenciada se fecha DOS veces — `diffgraph` ya desplaza el inicio y `plot_combined` le vuelve a sumar las observaciones consumidas
-status: open
+status: fixed
 severity: medium
 component: graphics
 found_in: 2.0.0
-fixed_in:
+fixed_in: 2.0.2.dev0
 reported: 2026-09-25
 reporter: David — revisión de las figuras de la suite (art BUG-0165)
 tags:
@@ -63,3 +63,21 @@ desplazado y `timeout=0`. Lo primero es el convenio de C.
 
 Que el primer punto dibujado sea el de la primera observación que sobrevive,
 para d y D; los tests de BUG-0002 sólo usan series sin diferenciar.
+
+## Resolution (2026-10-03)
+
+The first option, fug C's convention. `diffgraph` draws a series that keeps
+the ORIGINAL start, with the observations lost to differencing in `timeout`.
+The panel adds `begtime − 1` itself, so `timeout` no longer includes it. The
+series with the moved start (`res_ser`) stays for the statistics and the text
+output.
+
+This also follows the convention every engine was given the same day (art,
+drtran and sima pass the original start and `timeout`). `diffgraph` was the
+one case left that counted twice.
+
+**Validation:** `tests/test_bug_0003_diffgraph_fecha_una_vez.py`:
+- the report's table, for the series alone and the combined figure: first
+  point at 2000.000, 2000.083 and 2001.083, axis from 2000.0;
+- the statistics series still dated at its first observation.
+

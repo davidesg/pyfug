@@ -24,6 +24,7 @@ import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
 from matplotlib.figure import Figure
 
+from pyfug.graphics.base import jt_style
 from pyfug.graphics.base import (
     JT_COLOR_SERIES, JT_LINE_WIDTH_BORDER,
 )
@@ -79,6 +80,7 @@ def _draw_panel(ax, ms, dts, title: str = "") -> None:
         ax.set_title(title, fontsize=15, fontweight="bold", pad=8)
 
 
+@jt_style
 def plot_mean_deviation(ser, nog: int = 0, title: str = "", fig=None) -> Figure:
     """Mean vs Standard-Deviation scatter chart (Jenkins-Treadway style).
 
@@ -129,6 +131,7 @@ def plot_mean_deviation(ser, nog: int = 0, title: str = "", fig=None) -> Figure:
     return fig
 
 
+@jt_style
 def plot_mean_deviation_pair(ser, nog: int = 0,
                              name: str = "", fig=None) -> Figure:
     """Side-by-side m-dt comparison: level (left) vs log (right).

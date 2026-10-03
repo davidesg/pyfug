@@ -22,7 +22,7 @@ import matplotlib.pyplot as plt
 from pyfug.core import Tseries, obs_to_date
 from pyfug.transform import boxcox, delop, apply_diffops
 from pyfug.statistics import compute_all
-from pyfug.graphics.base import plot_title, file_plot_name
+from pyfug.graphics.base import jt_style, plot_title, file_plot_name
 from pyfug.graphics.series import plot_series
 from pyfug.graphics.acf_pacf import plot_acf_pacf
 from pyfug.graphics.combined import plot_combined
@@ -31,6 +31,7 @@ from pyfug.graphics.mean_deviation import plot_mean_deviation
 from pyfug.ascii import generate_ascii_output
 
 
+@jt_style
 def diffgraph(ser: Tseries,
               nparma: int = 0,
               boxlam: float = 1.0,
@@ -174,14 +175,20 @@ def diffgraph(ser: Tseries,
     title = plot_title(nrdiff, nadiff, boxlam, ser.freq, ser.name)
     fname = file_plot_name(nrdiff, nadiff, boxlam, ser.freq, outname)
 
-    # ── Step 5: Compute time offsets for axis labeling ─────
-    if ser.begtime == 1 and ser.freq > 1:
-        timeout = ornsop
-    elif ser.freq > 1:
-        timeout = ornsop + (ser.begtime - 1)
-    else:
-        timeout = ornsop + ser.outyear
-
+    # ── Step 5: the dates of the plotted series (BUG-0003) ──
+    # One count, fug C's: the series to PLOT keeps the ORIGINAL start, and the
+    # observations lost to differencing go in `timeout`; the axis then starts
+    # at period 1 of the starting year (fug.c: timeout = ornsop + begtime - 1,
+    # the begtime part added by the panel). `res_ser`, with the start already
+    # moved, stays for the statistics and the text output. Passing it to the
+    # figures with that timeout counted the lost observations twice.
+    lost = len(transformed) - len(res_ser.data)
+    plot_ser = Tseries(
+        name=res_ser.name, nobs=res_ser.nobs, freq=ser.freq,
+        begyear=ser.begyear, begtime=ser.begtime, outyear=ser.outyear,
+        data=res_ser.data, d=nrdiff, ds=nadiff, boxlam=boxlam, parent=ser,
+    )
+    timeout = lost
     tsnobs = ser.nobs
     tsby = ser.begyear
     if ser.freq == 1:
@@ -193,7 +200,7 @@ def diffgraph(ser: Tseries,
 
     # Case A: Series only
     if case_a:
-        fig = plot_series(res_ser, tsnobs=tsnobs, timeout=timeout,
+        fig = plot_series(plot_ser, tsnobs=tsnobs, timeout=timeout,
                          tsby=tsby, d=nrdiff, ds=nadiff, title=title)
         if save:
             path = output_dir / f"{fname}_series.pdf"
@@ -213,7 +220,7 @@ def diffgraph(ser: Tseries,
 
     # Case C: Combined
     if case_c:
-        fig = plot_combined(res_ser, npar=nparma, tsnobs=tsnobs,
+        fig = plot_combined(plot_ser, npar=nparma, tsnobs=tsnobs,
                            timeout=timeout, tsby=tsby,
                            d=nrdiff, ds=nadiff, nlags=lags,
                            cbands=cbands, title=title)
@@ -270,6 +277,7 @@ def diffgraph(ser: Tseries,
     return result
 
 
+@jt_style
 def diffgraph_set(ser: Tseries,
                   boxlam: float = 1.0,
                   boxm: float = 0.0,

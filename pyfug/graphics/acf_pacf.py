@@ -14,8 +14,10 @@ from matplotlib.figure import Figure
 
 from pyfug.statistics import acf, pacf, chi_test, acf_pacf_max
 from pyfug.graphics import fugplot as fp
+from pyfug.graphics.base import jt_style
 
 
+@jt_style
 def plot_acf_pacf(ser, npar=0, nlags=0, cbands=0.0,
                   title="", fig=None) -> Figure:
     """The acf and the pacf of a series, as fug -b draws them.

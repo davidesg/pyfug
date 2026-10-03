@@ -49,29 +49,52 @@ JT_COLOR_NORMAL = "#000000"         # black
 JT_DPI = 150
 
 
-def _setup_matplotlib_rc():
-    """Configure matplotlib rcParams for Jenkins-Treadway style."""
-    matplotlib.rcParams.update({
-        "font.family": JT_FONT_FAMILY,
-        "font.sans-serif": ["DejaVu Sans", "Arial", "Helvetica", "sans-serif"],
-        "font.size": JT_FONT_SIZE_AXIS,
-        "axes.titlesize": JT_FONT_SIZE_TITLE,
-        "axes.labelsize": JT_FONT_SIZE_LABEL,
-        "xtick.labelsize": JT_FONT_SIZE_TICKS,
-        "ytick.labelsize": JT_FONT_SIZE_TICKS,
-        "lines.linewidth": JT_LINE_WIDTH_SERIES,
-        "axes.linewidth": JT_LINE_WIDTH_BORDER,
-        "grid.linewidth": JT_LINE_WIDTH_GRID,
-        "axes.grid": False,
-        "figure.dpi": JT_DPI,
-        "savefig.dpi": JT_DPI,
-        "savefig.bbox": "tight",
-        "savefig.pad_inches": 0.1,
-        "text.usetex": False,
-    })
+_JT_RC = {
+    "font.family": JT_FONT_FAMILY,
+    "font.sans-serif": ["DejaVu Sans", "Arial", "Helvetica", "sans-serif"],
+    "font.size": JT_FONT_SIZE_AXIS,
+    "axes.titlesize": JT_FONT_SIZE_TITLE,
+    "axes.labelsize": JT_FONT_SIZE_LABEL,
+    "xtick.labelsize": JT_FONT_SIZE_TICKS,
+    "ytick.labelsize": JT_FONT_SIZE_TICKS,
+    "lines.linewidth": JT_LINE_WIDTH_SERIES,
+    "axes.linewidth": JT_LINE_WIDTH_BORDER,
+    "grid.linewidth": JT_LINE_WIDTH_GRID,
+    "axes.grid": False,
+    "figure.dpi": JT_DPI,
+    "savefig.dpi": JT_DPI,
+    "savefig.bbox": "tight",
+    "savefig.pad_inches": 0.1,
+    "text.usetex": False,
+}
 
 
-_setup_matplotlib_rc()
+def jt_style(func):
+    """Draw `func`'s figure with the Jenkins-Treadway style, and only it.
+
+    BUG-0004. The style used to be written into matplotlib's GLOBAL rcParams
+    when this module was imported, so every figure the process drew afterwards
+    (fue's, art's, the user's) took pyfug's dpi, fonts and line widths, and
+    differently depending on the order of the imports. Now each public plot
+    function runs inside `matplotlib.rc_context`, and importing pyfug changes
+    nothing.
+    """
+    import functools
+
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        with matplotlib.rc_context(_JT_RC):
+            return func(*args, **kwargs)
+    return wrapper
+
+
+def use_jt_style():
+    """Opt in: apply the Jenkins-Treadway style to the whole process."""
+    matplotlib.rcParams.update(_JT_RC)
+
+
+# Compatibility: the old name, now an explicit opt-in that nothing calls.
+_setup_matplotlib_rc = use_jt_style
 
 
 class JTFigure:
