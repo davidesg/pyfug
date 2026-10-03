@@ -220,3 +220,30 @@ def _tics_size(size: int, abs_max: float) -> float:
         return abs_max + 0.72
     else:
         return abs_max + 0.62
+
+
+def _rotulo_estacional(yr: int, freq: int) -> str:
+    """Rótulo de año de una serie estacional (BUG-0005).
+
+    - Trimestral: los DOS últimos dígitos, siempre. Es el legado de Treadway en
+      GraphMaker (`singletrim.cpp`: `FormatFloat("00", …)`); con el año entero
+      los rótulos se montaban pasados unos 25 años.
+    - Mensual (y cualquier otra estacional): el año entero, como lo aprobó
+      Treadway. Si no cabe, `_compacta_si_se_montan` lo pasa a dos dígitos.
+
+    Las anuales no pasan por aquí: año entero cada 20 años, como fug C; en
+    series históricas dos dígitos serían ambiguos.
+    """
+    return f"{int(yr) % 100:02d}" if int(freq) == 4 else str(int(yr))
+
+
+def _compacta_si_se_montan(fig, ax, freq: int) -> None:
+    """Pasa los años a dos dígitos SÓLO si el año entero se monta (mensual)."""
+    if int(freq) in (1, 4):
+        return
+    fig.canvas.draw()
+    lbls = [t for t in ax.get_xticklabels() if t.get_text()]
+    cajas = [t.get_window_extent() for t in lbls]
+    if any(a.x1 >= b.x0 for a, b in zip(cajas, cajas[1:])):
+        ax.set_xticklabels([f"{int(t.get_text()) % 100:02d}" if t.get_text()
+                            else "" for t in ax.get_xticklabels()])

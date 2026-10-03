@@ -15,8 +15,9 @@ from matplotlib.figure import Figure
 from matplotlib.ticker import MultipleLocator
 
 from pyfug.statistics import series_max, series_size
-from pyfug.graphics.base import JT_FONT_YEAR, JT_COLOR_SERIES, _tics_size
+from pyfug.graphics.base import JT_FONT_YEAR, _rotulo_estacional, _compacta_si_se_montan, JT_COLOR_SERIES, _tics_size
 from pyfug.graphics.combined import _to_decimal_year
+
 
 
 def plot_series(ser, tsnobs=None, timeout=None, tsby=None,
@@ -86,7 +87,7 @@ def plot_series(ser, tsnobs=None, timeout=None, tsby=None,
             if yr <= x1 + 1.0 / f:
                 ax.axvline(yr, color='k', lw=0.5, zorder=1)
                 tick_pos.append(yr)
-                tick_lbl.append(str(yr))
+                tick_lbl.append(_rotulo_estacional(yr, f))
         ax.set_xticks(tick_pos)
         ax.set_xticklabels(tick_lbl, fontsize=JT_FONT_YEAR)
     else:
@@ -137,6 +138,8 @@ def plot_series(ser, tsnobs=None, timeout=None, tsby=None,
         fs_title = 24 if size == 2 else 22
         ax.set_title(title, fontsize=fs_title, fontweight='bold', pad=10)
 
+    if f > 1:
+        _compacta_si_se_montan(fig, ax, f)
     return fig
 
 

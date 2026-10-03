@@ -6,6 +6,13 @@ Etiquetas de publicación: `v*`.
 
 ## Unreleased
 
+**Quarterly year labels have two digits, as in GraphMaker** (BUG-0005).
+- A quarterly series labels every other year as `96`, `98`, `00`. With full
+  years the labels overlapped once a series passed about 25 years.
+- Monthly series keep the full year, as Treadway approved, and switch to two
+  digits only if the labels would overlap.
+- Annual series keep the full year every 20 years.
+
 **Without statsmodels.** ACF, PACF and Ljung-Box are computed in
 `pyfug.statistics` with numpy and scipy, with the same formulas as fue's
 (`fue.acf`, `fue.pacf`, `fue.ljung_box`): the ACF to 2e-16, the PACF

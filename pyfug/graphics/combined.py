@@ -20,7 +20,8 @@ from matplotlib.ticker import MultipleLocator
 from pyfug.statistics import (
     acf, pacf, chi_test, acf_pacf_max, series_max, series_size
 )
-from pyfug.graphics.base import JT_FONT_YEAR, _tics_size
+from pyfug.graphics.base import JT_FONT_YEAR, _rotulo_estacional, _compacta_si_se_montan, _tics_size
+
 
 
 def _layout_params(size2: bool, nlags: int):
@@ -154,7 +155,7 @@ def plot_combined(ser, npar=0, tsnobs=None, timeout=None, tsby=None,
             if yr <= x1 + 1.0 / f:
                 ax_s.axvline(yr, color='k', lw=0.5, zorder=1)
                 tick_pos.append(yr)
-                tick_lbl.append(str(yr))
+                tick_lbl.append(_rotulo_estacional(yr, f))
         ax_s.set_xticks(tick_pos)
         ax_s.set_xticklabels(tick_lbl, fontsize=JT_FONT_YEAR)
     else:
@@ -241,6 +242,8 @@ def plot_combined(ser, npar=0, tsnobs=None, timeout=None, tsby=None,
     _draw_acf_panel(ax_pac, pacf_vals, nlags, n, f, cmax, conf,
                     "", "pacf", fs_acf=fs_acf, fs_q=fs_q)
 
+    if f > 1:
+        _compacta_si_se_montan(fig, ax_s, f)
     return fig
 
 

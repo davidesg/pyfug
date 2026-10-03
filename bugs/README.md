@@ -4,12 +4,13 @@ In-repo bug tracker for **pyfug — los gráficos de la escuela Jenkins-Treadway
 
 New report: `art-bug new` (or copy `TEMPLATE.md`).  Validate: `art-bug check`.  A fix commit references the id, e.g. `fix(pipeline): BUG-0001 …`.
 
-**2 report(s), 1 open.**
+**5 report(s), 3 open.**
 
 | id | status | sev | component | title | fixed in |
 |----|--------|-----|-----------|-------|----------|
 | [BUG-0001](BUG-0001-los-anos-del-eje-temporal-se-solapan.md) | open | medium | graphics | Los años del eje temporal se solapan en series trimestrales largas — pyfug fija el paso en dos años y encoge la figura | — |
-| [BUG-0002](BUG-0002-la-figura-se-rompia-en-series-anuales.md) | fixed | high | graphics | La figura combinada se rompía en TODA serie anual — `x_pad` sólo se asignaba en la rama f>1 y se usaba siempre | 2.0.1 |
 | [BUG-0003](BUG-0003-la-serie-diferenciada-se-fecha-dos-veces.md) | open | medium | graphics | La serie diferenciada se fecha DOS veces — `diffgraph` ya desplaza el inicio y `plot_combined` le vuelve a sumar las observaciones consumidas | — |
 | [BUG-0004](BUG-0004-importar-pyfug-cambia-todas-las-figuras-del-proceso.md) | open | medium | graphics | Importar pyfug cambia TODAS las figuras del proceso — `graphics/base.py` reescribe los `rcParams` globales de matplotlib al cargarse | — |
+| [BUG-0002](BUG-0002-la-figura-se-rompia-en-series-anuales.md) | fixed | high | graphics | La figura combinada se rompía en TODA serie anual — `x_pad` sólo se asignaba en la rama f>1 y se usaba siempre | 2.0.1 |
+| [BUG-0005](BUG-0005-en-series-estacionales-los-a-os-se-rotulan-enter.md) | fixed | medium | graphics | En series estacionales los años se rotulan enteros y se montan a partir de ~25 años — GraphMaker los rotulaba con dos dígitos | 2.0.2.dev0 |
 
