@@ -5,7 +5,7 @@ status: fixed
 severity: medium
 component: graphics
 found_in: 2.0.1
-fixed_in: 2.0.2.dev0
+fixed_in: 2.0.2
 reported: 2026-10-03
 reporter: David / Claude — revisión de fidelidad con GraphMaker y fug C
 tags:
