@@ -21,7 +21,7 @@ from pyfug.graphics import fugplot as fp
 @jt_style
 def plot_series(ser, tsnobs=None, timeout=None, tsby=None,
                 d=0, ds=0, title="",
-                fig=None, ax=None) -> Figure:
+                fig=None, ax=None, percent=True) -> Figure:
     """Plot the standardized time series with the fug C design.
 
     Parameters
@@ -39,6 +39,9 @@ def plot_series(ser, tsnobs=None, timeout=None, tsby=None,
     fig, ax : optional
         Existing figure/axes to draw on. With an `ax`, only the series panel
         is drawn into it, at its own position.
+    percent : bool
+        Statistics line in % (fug C's convention, right for a rate such as
+        100·∇ln y) or, with False, in the series' own scale (BUG-0008).
     """
     n = ser.nobs
     f = ser.freq
@@ -76,7 +79,8 @@ def plot_series(ser, tsnobs=None, timeout=None, tsby=None,
                          abs_max, timeout, tsby)
     fp.title(fig, W, H, title or getattr(ser, "name", "") or "", L["title"],
              sx1, H - 16.0, align="right")
-    fp.statistics(fig, L, W, H, (sx0 + sx1) / 2.0, 12.0, mean_v, std_v, n)
+    fp.statistics(fig, L, W, H, (sx0 + sx1) / 2.0, 12.0, mean_v, std_v, n,
+                  percent=percent)
     if f > 1:
         _compacta_si_se_montan(fig, ax, f)
     return fig

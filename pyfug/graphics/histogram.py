@@ -26,7 +26,8 @@ from pyfug.graphics.base import (
 
 
 @jt_style
-def plot_histogram(ser, d=0, ds=0, title="", fig=None) -> Figure:
+def plot_histogram(ser, d=0, ds=0, title="", fig=None,
+                   density=False) -> Figure:
     """Plot histogram with normal overlay — Jenkins-Treadway style.
 
     Parameters
@@ -41,6 +42,12 @@ def plot_histogram(ser, d=0, ds=0, title="", fig=None) -> Figure:
         Plot title.
     fig : Figure, optional
         Existing figure.
+    density : bool
+        False (default): fug C's scale, 100·density, with the axis labelled
+        «%» (gnuplot_graphics.c ≈764, 797, 807) — a percentage per unit of z,
+        not of the observations, so a bar can pass 100. True: the density
+        itself (bars of area 1, the normal peaking at 0.399), axis «densidad»
+        (BUG-0008).
 
     Returns
     -------
@@ -79,6 +86,8 @@ def plot_histogram(ser, d=0, ds=0, title="", fig=None) -> Figure:
     counts, _ = np.histogram(z, bins=edges)
     # C: prob[i] = 100*2*freqs[i]/nobs  → density % (per unit), not frequency %
     pct = 200.0 * counts / n if n > 0 else counts.astype(float)
+    escala = 0.01 if density else 1.0
+    pct = pct * escala
 
     # ── Plot ─────────────────────────────────────────────────────────────
     if fig is None:
@@ -95,7 +104,7 @@ def plot_histogram(ser, d=0, ds=0, title="", fig=None) -> Figure:
     # Normal curve overlay scaled to percentage
     x_grid  = np.linspace(-xmax, xmax, 300)
     pdf     = stats.norm.pdf(x_grid, 0, 1)
-    pdf_pct = pdf * 100        # density % per unit (matches C: same scale as bars)
+    pdf_pct = pdf * 100 * escala   # density % per unit (matches C: same scale as bars)
     ax.plot(x_grid, pdf_pct, color=JT_COLOR_NORMAL,
             linewidth=JT_LINE_WIDTH_SERIES + 0.5)
 
@@ -114,7 +123,7 @@ def plot_histogram(ser, d=0, ds=0, title="", fig=None) -> Figure:
         f"        $JB$ = {jb_val:.1f}  ({jb_pval:.3f})",
         fontsize=14,
     )
-    ax.set_ylabel("%", fontsize=16)
+    ax.set_ylabel("densidad" if density else "%", fontsize=16)
     ax.set_xticks(np.arange(-xmax, xmax + 1, 2 if xmax == 4 else 4))
     ax.tick_params(axis="both", direction="out")
 

@@ -4,9 +4,14 @@ Gráficos Jenkins-Treadway para el análisis de series temporales: el puerto a
 Python de fug (C, Treadway y Guerrero). Registro de defectos en `bugs/`.
 Etiquetas de publicación: `v*`.
 
-## Unreleased
+## 2.0.2 (unreleased)
 
 **Fixes in the plotting engine**
+- **BUG-0008:** the statistics line and the histogram axis can leave fug C's
+  convention. `plot_series`/`plot_combined(..., percent=False)` write w̄,
+  σ̂_w̄ and σ̂_w in the series' own scale, without %, for a level or an
+  untransformed series. `plot_histogram(..., density=True)` draws the density
+  (area 1) with the axis «densidad». The defaults are still the C's.
 - **BUG-0001** (closed): long quarterly axes no longer overlap. It was
   resolved by BUG-0005, 0006 and 0007.
 - **BUG-0003:** `diffgraph` dated the differenced series twice. The plotted

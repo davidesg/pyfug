@@ -18,8 +18,12 @@ from pyfug.graphics import fugplot as fp
 @jt_style
 def plot_combined(ser, npar=0, tsnobs=None, timeout=None, tsby=None,
                   d=0, ds=0, nlags=0, cbands=0.0,
-                  title="", fig=None) -> Figure:
-    """Replica of FUG gnuplot_File_PlotSer_CorrSer with C-exact axes positions."""
+                  title="", fig=None, percent=True) -> Figure:
+    """Replica of FUG gnuplot_File_PlotSer_CorrSer with C-exact axes positions.
+
+    `percent=False` writes the statistics line in the series' own scale instead
+    of fug C's ×100 and «%» (BUG-0008).
+    """
     n = ser.nobs
     f = ser.freq
     data_raw = np.asarray(ser.data, dtype=float)
@@ -72,7 +76,7 @@ def plot_combined(ser, npar=0, tsnobs=None, timeout=None, tsby=None,
     fp.title(fig, W, H, title or getattr(ser, "name", "") or "", L["title"],
              sx0 + 0.80 * (sx1 - sx0), H - 16.0, align="left", xmax=cx0 - 6.0)
     fp.statistics(fig, L, W, H, (sx0 + sx1) / 2.0, 16.0 if size == 2 else 14.0,
-                  mean_v, std_v, n)
+                  mean_v, std_v, n, percent=percent)
     fp.corr_panel(fig, L, W, H, cx0, cx1, 0.595 * H, 0.833 * H,
                   acf_vals, nlags, f, n, cmax, "acf")
     fp.q_label(fig, W, H, (cx0 + cx1) / 2.0, 0.595 * H - 21.0, L["q"],

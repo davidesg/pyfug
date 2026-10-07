@@ -241,13 +241,23 @@ def title(fig, W, H, text, size, x, y, align="right", xmax=0.0):
     return t
 
 
-def statistics(fig, L, W, H, xc, y, mean, sd, n):
-    """w̄ ( σ̂_w̄ ) = m% (se%)      σ̂_w = sd%, centrada en xc (puntos)."""
+def statistics(fig, L, W, H, xc, y, mean, sd, n, percent=True):
+    """w̄ ( σ̂_w̄ ) = m% (se%)      σ̂_w = sd%, centrada en xc (puntos).
+
+    `percent=True` es el convenio de fug C (gnuplot_graphics.c ≈191-197): ×100
+    y «%», que es lo correcto cuando lo dibujado es una tasa (100·∇ln y). Con
+    `percent=False` los tres números van en la escala de la serie, sin % —
+    para un nivel en logaritmos o una serie sin transformar (BUG-0008).
+    """
     se = sd / math.sqrt(n)
+    if percent:
+        txt = (f"{100 * mean:.2f}% ({100 * se:.2f}%)",
+               f"{100 * sd:.2f}%")
+    else:
+        txt = (f"{mean:.4g} ({se:.4g})", f"{sd:.4g}")
     fig.text(xc / W, y / H,
-             r"$\bar{w}$ ( $\hat{\sigma}_{\bar{w}}$ ) = "
-             f"{100 * mean:.2f}% ({100 * se:.2f}%)"
-             r"        $\hat{\sigma}_w$ = " f"{100 * sd:.2f}%",
+             r"$\bar{w}$ ( $\hat{\sigma}_{\bar{w}}$ ) = " + txt[0]
+             + r"        $\hat{\sigma}_w$ = " + txt[1],
              ha="center", va="baseline", fontsize=L["stat"], fontfamily=FAMILY)
 
 
