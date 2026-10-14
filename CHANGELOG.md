@@ -4,7 +4,7 @@ Gráficos Jenkins-Treadway para el análisis de series temporales: el puerto a
 Python de fug (C, Treadway y Guerrero). Registro de defectos en `bugs/`.
 Etiquetas de publicación: `v*`.
 
-## 2.0.2 (unreleased)
+## 2.0.2 — 2026-10-15
 
 **Fixes in the plotting engine**
 - **BUG-0008:** the statistics line and the histogram axis can leave fug C's
