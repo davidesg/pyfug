@@ -4,10 +4,11 @@ In-repo bug tracker for **pyfug — los gráficos de la escuela Jenkins-Treadway
 
 New report: `art-bug new` (or copy `TEMPLATE.md`).  Validate: `art-bug check`.  A fix commit references the id, e.g. `fix(pipeline): BUG-0001 …`.
 
-**8 report(s), 0 open.**
+**9 report(s), 1 open.**
 
 | id | status | sev | component | title | fixed in |
 |----|--------|-----|-----------|-------|----------|
+| [BUG-0009](BUG-0009-sin-pantalla-importar-pyfug-cambia-el-backend-global.md) | open | low | graphics | Sin pantalla, importar pyfug.graphics cambia el backend GLOBAL de matplotlib — `graphics/engine.py` llama a `matplotlib.use("Agg")` al cargarse | — |
 | [BUG-0001](BUG-0001-los-anos-del-eje-temporal-se-solapan.md) | fixed | medium | graphics | Los años del eje temporal se solapan en series trimestrales largas — pyfug fija el paso en dos años y encoge la figura | 2.0.2 |
 | [BUG-0002](BUG-0002-la-figura-se-rompia-en-series-anuales.md) | fixed | high | graphics | La figura combinada se rompía en TODA serie anual — `x_pad` sólo se asignaba en la rama f>1 y se usaba siempre | 2.0.1 |
 | [BUG-0003](BUG-0003-la-serie-diferenciada-se-fecha-dos-veces.md) | fixed | medium | graphics | La serie diferenciada se fecha DOS veces — `diffgraph` ya desplaza el inicio y `plot_combined` le vuelve a sumar las observaciones consumidas | 2.0.2 |
