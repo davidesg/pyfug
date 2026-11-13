@@ -1,11 +1,11 @@
 ---
 id: BUG-0009
 title: Sin pantalla, importar pyfug.graphics cambia el backend GLOBAL de matplotlib — `graphics/engine.py` llama a `matplotlib.use("Agg")` al cargarse
-status: open
+status: fixed
 severity: low
 component: graphics
 found_in: 2.0.2
-fixed_in:
+fixed_in: 2.0.3
 reported: 2026-10-30
 reporter: David / Claude — prueba de instalación limpia de atsw 2.1.0 en diez distribuciones
 tags:
@@ -62,3 +62,12 @@ y no de una biblioteca.
 
 El repro, y `tests/test_bug_0004_rcparams_por_figura.py` en un entorno sin
 pantalla.
+
+## Arreglo
+
+`graphics/engine.py` ya no llama a `matplotlib.use("Agg")` al importarse. Elegir
+el backend es del proceso, no de una biblioteca: sin pantalla, matplotlib cae
+solo en Agg (para eso está `backend_fallback`), y con `MPLBACKEND` manda quien
+lo fijó. Comprobado sin `DISPLAY`, `WAYLAND_DISPLAY` ni `MPLBACKEND`: el import
+no cambia ningún rcParam (el repro sale con 0) y `plot_combined` dibuja y
+guarda la figura con el backend `agg` que matplotlib elige por su cuenta.

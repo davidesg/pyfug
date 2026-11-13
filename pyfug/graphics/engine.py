@@ -13,10 +13,9 @@ from pathlib import Path
 from typing import Optional, List
 
 import matplotlib
-# Only force Agg if no display available (headless servers)
-import os as _os
-if "DISPLAY" not in _os.environ and "WAYLAND_DISPLAY" not in _os.environ:
-    matplotlib.use("Agg")
+# No matplotlib.use() here: choosing the backend is the process's, not a
+# library's (BUG-0009). Without a display matplotlib falls back to Agg by
+# itself; forcing it wrote rcParams["backend"] and ["backend_fallback"].
 import matplotlib.pyplot as plt
 
 from pyfug.core import Tseries, obs_to_date

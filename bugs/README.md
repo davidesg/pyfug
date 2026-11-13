@@ -4,11 +4,10 @@ In-repo bug tracker for **pyfug — los gráficos de la escuela Jenkins-Treadway
 
 New report: `art-bug new` (or copy `TEMPLATE.md`).  Validate: `art-bug check`.  A fix commit references the id, e.g. `fix(pipeline): BUG-0001 …`.
 
-**9 report(s), 1 open.**
+**9 report(s), 0 open.**
 
 | id | status | sev | component | title | fixed in |
 |----|--------|-----|-----------|-------|----------|
-| [BUG-0009](BUG-0009-sin-pantalla-importar-pyfug-cambia-el-backend-global.md) | open | low | graphics | Sin pantalla, importar pyfug.graphics cambia el backend GLOBAL de matplotlib — `graphics/engine.py` llama a `matplotlib.use("Agg")` al cargarse | — |
 | [BUG-0001](BUG-0001-los-anos-del-eje-temporal-se-solapan.md) | fixed | medium | graphics | Los años del eje temporal se solapan en series trimestrales largas — pyfug fija el paso en dos años y encoge la figura | 2.0.2 |
 | [BUG-0002](BUG-0002-la-figura-se-rompia-en-series-anuales.md) | fixed | high | graphics | La figura combinada se rompía en TODA serie anual — `x_pad` sólo se asignaba en la rama f>1 y se usaba siempre | 2.0.1 |
 | [BUG-0003](BUG-0003-la-serie-diferenciada-se-fecha-dos-veces.md) | fixed | medium | graphics | La serie diferenciada se fecha DOS veces — `diffgraph` ya desplaza el inicio y `plot_combined` le vuelve a sumar las observaciones consumidas | 2.0.2 |
@@ -17,4 +16,5 @@ New report: `art-bug new` (or copy `TEMPLATE.md`).  Validate: `art-bug check`.  
 | [BUG-0006](BUG-0006-el-eje-de-las-series-estacionales-se-alinea-con-.md) | fixed | medium | graphics | El eje de las series estacionales se alinea con el año PAR anterior y cambia a paso 1 en series cortas — fug C, con la corrección de Treadway, arranca en el año de comienzo y va cada 2 años | 2.0.2 |
 | [BUG-0007](BUG-0007-plot-combined-no-reproduce-la-geometr-a-de-fug-c.md) | fixed | medium | graphics | plot_combined no reproduce la geometría de fug C — la serie ocupa el 75 % del alto (51 % en C), la acf/pacf es mayor y desigual y las fuentes son el doble | 2.0.2 |
 | [BUG-0008](BUG-0008-porcentaje-en-un-nivel-e-histograma-en-densidad.md) | fixed | low | graphics | La línea de estadísticos va siempre en % y el histograma rotula «%» lo que es 100·densidad — el convenio de fug C, sin forma de apagarlo para un nivel o una densidad | 2.0.2 |
+| [BUG-0009](BUG-0009-sin-pantalla-importar-pyfug-cambia-el-backend-global.md) | fixed | low | graphics | Sin pantalla, importar pyfug.graphics cambia el backend GLOBAL de matplotlib — `graphics/engine.py` llama a `matplotlib.use("Agg")` al cargarse | 2.0.3 |
 
