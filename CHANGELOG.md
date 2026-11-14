@@ -4,7 +4,7 @@ Gráficos Jenkins-Treadway para el análisis de series temporales: el puerto a
 Python de fug (C, Treadway y Guerrero). Registro de defectos en `bugs/`.
 Etiquetas de publicación: `v*`.
 
-## 2.0.3 — unreleased
+## 2.0.3 — 2026-11-14
 
 **BUG-0009: importing `pyfug.graphics` no longer chooses matplotlib's
 backend.** Without a display, `graphics/engine.py` called
