@@ -4,6 +4,20 @@ Gráficos Jenkins-Treadway para el análisis de series temporales: el puerto a
 Python de fug (C, Treadway y Guerrero). Registro de defectos en `bugs/`.
 Etiquetas de publicación: `v*`.
 
+## 2.0.3 — 2026-11-14
+
+**BUG-0009: importing `pyfug.graphics` no longer chooses matplotlib's
+backend.** Without a display, `graphics/engine.py` called
+`matplotlib.use("Agg")` on import, which changed the backend for the whole
+process: a program that had chosen another one before importing pyfug lost
+it (found in the clean install test of atsw 2.1.0 in ten distributions).
+Choosing the backend belongs to the process, not to a library: without a
+display matplotlib falls back to Agg on its own (`backend_fallback`), and
+`MPLBACKEND` is obeyed. The figures do not change.
+
+*Packaging note:* the version is still written twice, in `pyproject.toml` and
+`pyfug/__init__.py` (TODO.md); both have been bumped by hand.
+
 ## 2.0.2 — 2026-10-15
 
 **Fixes in the plotting engine**
