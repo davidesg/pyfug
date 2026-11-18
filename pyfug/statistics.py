@@ -70,6 +70,34 @@ def descriptive_stats(data: np.ndarray) -> dict:
     }
 
 
+def ccf(w1: np.ndarray, w2: np.ndarray, lags: int) -> np.ndarray:
+    """Two-sided sample cross-correlation function of two series.
+
+    Returns ``rho`` of length ``2*lags + 1`` for lags ``-lags .. +lags``, with
+    ``rho[lags + k]`` the correlation at lag k. At lag k > 0 it pairs ``w1_t``
+    with ``w2_{t-k}`` (w2 leads); at k < 0, ``w2_t`` with ``w1_{t-|k|}``. The
+    cross-covariances are divided by N, as drvus' ``ccf.c``, and standardised by
+    the contemporaneous standard deviations.
+
+    The suite's one CCF, with its drawing (``pyfug.graphics.ccf``). drvarma's
+    core keeps its own copy (``drvarma.diagnostics.ccf``, which its engines use
+    and which cannot depend on pyfug); the tests pin the two to the last bit.
+    """
+    w1 = np.asarray(w1, float).ravel()
+    w2 = np.asarray(w2, float).ravel()
+    n = w1.shape[0]
+    x1 = w1 - w1.mean()
+    x2 = w2 - w2.mean()
+    den = np.sqrt(float((x1 * x1).mean()) * float((x2 * x2).mean()))
+    rho = np.empty(2 * lags + 1)
+    for k in range(lags + 1):
+        c12 = float((x1[k:] * x2[:n - k]).sum() / n)       # (1/N) sum x1_t x2_{t-k}
+        c21 = float((x2[k:] * x1[:n - k]).sum() / n)       # (1/N) sum x2_t x1_{t-k}
+        rho[lags + k] = c12 / den
+        rho[lags - k] = c21 / den
+    return rho
+
+
 def acf(data: np.ndarray, nlags: int, unbiased: bool = False) -> np.ndarray:
     """Compute the autocorrelation function.
 
