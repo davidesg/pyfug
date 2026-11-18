@@ -4,6 +4,28 @@ Gráficos Jenkins-Treadway para el análisis de series temporales: el puerto a
 Python de fug (C, Treadway y Guerrero). Registro de defectos en `bugs/`.
 Etiquetas de publicación: `v*`.
 
+## 2.1.0 — unreleased
+
+**The two-sided CCF, the suite's one: `pyfug.statistics.ccf` and
+`pyfug.graphics.ccf`.** Its drawing was drvarma's (`drvarma.plots.
+_draw_ccf_panel`), which drtran and sima borrowed — sima through a private
+function. It lives here now, with the suite's other figures, in the format
+of the two prototypes Treadway approved (GraphMaker and drvus) that atsw-gui's
+C draws with `lib/ccfplot`: lags -K..K, bars, the bands at +-2/sqrt(N), the
+dashed vertical at lag 0, the leading series first in the title, Hosking's
+portmanteau below labelled P.
+
+- `ccf(w1, w2, lags)`: the two-sided CCF, as drvus' `ccf.c`. drvarma's core
+  keeps its own copy (its engines use it and cannot depend on pyfug); a test
+  pins the two to the last bit.
+- `draw_ccf_panel`, `plot_ccf`, `ccf_default_lags`, `ccf_scale`, `p_label`:
+  the panel and its rules, tested against `lib/ccfplot`'s (the default lags,
+  the scale steps, the P label). The statistic P is the engines', and comes in
+  as a label: it discounts the ARMA parameters of the model behind the
+  residuals (drvarma BUG-0015).
+- `save_ccf(fig, path)`: the figure in PNG and, in vectors — high definition,
+  as the C's EPS — in SVG and PDF.
+
 ## 2.0.3 — 2026-11-14
 
 **BUG-0009: importing `pyfug.graphics` no longer chooses matplotlib's

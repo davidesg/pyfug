@@ -22,14 +22,14 @@ $ pyfug PU one -c        # combined series + ACF/PACF plot
 $ pyfug PU set 2 1 -c    # identification plots set
 """
 
-__version__ = "2.0.3"   # también en pyproject.toml: ver TODO (escrita dos veces)
+__version__ = "2.1.0"   # también en pyproject.toml: ver TODO (escrita dos veces)
 __author__ = "David E. Guerrero & Arthur B. Treadway"
 
 from pyfug.core import Tseries
 from pyfug.io import read_inp, read_csv, read_excel, read_pandas
 from pyfug.transform import boxcox, regular_diff, seasonal_diff, apply_diffops
 from pyfug.statistics import (
-    acf, pacf, ljung_box,
+    acf, pacf, ljung_box, ccf,
     descriptive_stats, chi_test,
 )
 from pyfug.graphics import (
@@ -39,6 +39,7 @@ from pyfug.graphics import (
     plot_histogram,
     plot_mean_deviation,
     plot_forecast,
+    plot_ccf,
     diffgraph,
 )
 from pyfug.ascii import generate_ascii_output
@@ -47,8 +48,8 @@ __all__ = [
     "Tseries",
     "read_inp", "read_csv", "read_excel", "read_pandas",
     "boxcox", "regular_diff", "seasonal_diff", "apply_diffops",
-    "acf", "pacf", "ljung_box", "descriptive_stats", "chi_test",
+    "acf", "pacf", "ljung_box", "ccf", "descriptive_stats", "chi_test",
     "plot_series", "plot_acf_pacf", "plot_combined",
-    "plot_histogram", "plot_mean_deviation", "plot_forecast",
+    "plot_histogram", "plot_mean_deviation", "plot_forecast", "plot_ccf",
     "diffgraph", "generate_ascii_output",
 ]
