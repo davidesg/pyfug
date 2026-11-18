@@ -75,3 +75,18 @@ def test_vectors_and_raster(tmp_path):
     assert [os.path.splitext(p)[1] for p in paths] == [".png", ".svg", ".pdf"]
     assert all(os.path.getsize(p) > 1000 for p in paths)
     assert open(paths[1]).read().lstrip().startswith(("<?xml", "<svg"))
+
+
+@pytest.mark.parametrize("freq, lags, step", [(1, 7, 2), (4, 15, 4), (12, 12, 12),
+                                              (12, 39, 12), (12, 8, 2)])
+def test_the_axis_ticks_are_graphmakers(freq, lags, step):
+    """GraphMaker (ccfgrafico.cpp, the oracle) sets the increment of the lag
+    axis by FREQUENCY: annual 2, quarterly 4, monthly 12, and monthly with 8 lags
+    2. (atsw-gui's lib/ccfplot decides it by the number of lags and marks a
+    monthly panel of 12 lags every 4: its BUG-0001.)"""
+    import matplotlib.pyplot as plt
+    fig, ax = plt.subplots()
+    draw_ccf_panel(ax, np.zeros(2 * lags + 1), lags, 200, freq, "X - Y")
+    ticks = [int(t) for t in ax.get_xticks()]
+    assert ticks == list(range(-(lags // step) * step, lags + 1, step))
+    plt.close(fig)
