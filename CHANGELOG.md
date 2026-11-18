@@ -4,7 +4,7 @@ Gráficos Jenkins-Treadway para el análisis de series temporales: el puerto a
 Python de fug (C, Treadway y Guerrero). Registro de defectos en `bugs/`.
 Etiquetas de publicación: `v*`.
 
-## 2.1.0 — unreleased
+## 2.1.0 — 2026-11-18
 
 **The two-sided CCF, the suite's one: `pyfug.statistics.ccf` and
 `pyfug.graphics.ccf`.** Its drawing was drvarma's (`drvarma.plots.
